@@ -224,16 +224,17 @@ $options = choicegroup_prepare_options($choicegroup, $USER, $cm, $allresponses);
 $renderer = $PAGE->get_renderer('mod_choicegroup');
 
 if ($choicegroup->publish == CHOICEGROUP_PUBLISH_NAMES){
-	$choicegroup->publish = has_capability('mod/choicegroup:shownames', $context) ? 1 : 0;
+    $choicegroup->publish = has_capability('mod/choicegroup:shownames', $context) ? 1 : 0;
 }
 if ( (!$current or $choicegroup->allowupdate) and $choicegroupopen and is_enrolled($context, NULL, 'mod/choicegroup:choose')) {
-// They haven't made their choicegroup yet or updates allowed and choicegroup is open
-
-    echo $renderer->display_options($options, $cm->id, $choicegroup->display, $choicegroup->publish, $choicegroup->limitanswers, $choicegroup->showresults, $current, $choicegroupopen, false, $choicegroup->multipleenrollmentspossible);
+    // They haven't made their choicegroup yet or updates allowed and choicegroup is open
+    $disabled = false;
 } else {
     // form can not be updated
-    echo $renderer->display_options($options, $cm->id, $choicegroup->display, $choicegroup->publish, $choicegroup->limitanswers, $choicegroup->showresults, $current, $choicegroupopen, true, $choicegroup->multipleenrollmentspossible);
+    $disabled = true;
 }
+echo $renderer->display_options($options, $cm->id, $choicegroup->display, $choicegroup->publish, $choicegroup->limitanswers, $choicegroup->showresults, $current, $choicegroupopen, $disabled, $choicegroup->multipleenrollmentspossible);
+
 $choicegroupformshown = true;
 
 $sitecontext = context_system::instance();
